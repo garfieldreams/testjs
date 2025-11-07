@@ -1,23 +1,28 @@
 function lexer(str) {
     let i = 0;
+    const tokens = [];
+
     while (i < str.length) {
+        const char = str[i];
 
         // 1. 排除空格
-        if (str[i] === ' ') { i++; continue;}
-    
+        if (char === ' ') { i++; continue; }
+
         // 2. 获取数字 / 连续数字 
-        if (str[i] >= '0' && str[i] <= '9'){
+        if (char >= '0' && char <= '9') {
             let numStr = '';
-            while (i < str.length && str[i] >= '0' && str[i] <= '9'){
-                numStr =+ str[i];
+            while (i < str.length && str[i] >= '0' && str[i] <= '9') {
+                numStr += char;
                 i++
             }
-            console.log(numStr);
+            tokens.push({ type: 'Number', value: numStr })
             continue;
         }
 
-        console.log(str[i]);
+        tokens.push({ type: 'Symbol', value: char }) // 封装成 tokens 对象数组
         i++;
     }
+
+    return tokens;
 }
-lexer('let n = 5 + 7');
+console.log(lexer('let n = 5 + 7'));
