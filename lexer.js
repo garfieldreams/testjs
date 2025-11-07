@@ -1,9 +1,11 @@
 function lexer(str) {
     let i = 0;
     while (i < str.length) {
-        if (str[i] !== ' ') { // 排除空格
-            console.log(str[i]);
-        }
+
+        // 1. 排除空格
+        if (str[i] === ' ') { i++; continue;}
+    
+        console.log(str[i]);
         i++;
     }
 }
