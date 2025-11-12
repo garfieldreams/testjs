@@ -9,7 +9,7 @@ function lexer(str) {
         '=', '!', '+', '-', '*', '/', '%', '&', '|', '<', '>'
     ]);
 
-    while (i < str.length) {
+    whileLoop: while (i < str.length) {
         const char = str[i];
 
         // 1. 排除空格
@@ -26,21 +26,14 @@ function lexer(str) {
             continue;
         }
 
-        //  3.0 - 遍历符号运算符查找表 
-        let matchedOp = null;
-        for (let len = 4; len >= 1; len--) {
-            const candidate = str.substring(i, i + len);
+        //  3. 通过查找表匹配运算符 
+        for (let len = 3; len >= 1; len--) {
+            const candidate = str.slice(i, i + len);
             if (operators.has(candidate)) {
-                matchedOp = candidate;
-                break
+                tokens.push({ type: 'Operator', value: candidate});
+                i+= len;
+                continue whileLoop;
             }
-        }
-
-        // 3. 识别多字符/运算符
-        if (matchedOp) {
-            tokens.push({ type: 'Operator', value: matchedOp })
-            i += matchedOp.length;
-            continue;
         }
 
         tokens.push({ type: 'Symbol', value: char }) // 封装成 tokens 对象数组
