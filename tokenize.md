@@ -23,6 +23,7 @@ function tokenize(text){
 
 解析逻辑：while循环扫描
 // 3. 解析逻辑
+```javascript
 while(i < text.length){  // 先确定扫描边界
 	const currentChar = text[i];  // 获取当前指针指向的字符
 	
@@ -36,6 +37,7 @@ while(i < text.length){  // 先确定扫描边界
 	tokens.push({type: 'Unknown', value: currentChar});
 	i++;  // 指针移动到下一个字符; 
 }
+```
 
 示例：解析数字
 ```javascript
