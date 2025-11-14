@@ -39,9 +39,19 @@ while(i < text.length){  // 先确定扫描边界
 }
 ```
 
-示例：解析数字
+示例：解析单个数字
 ```javascript
-// 3.2 数字解析逻辑
+// 3.2 单个数字解析逻辑
+if(currentChar >= '0' && currentChar <= '9'){
+	tokens.push({ type: 'Number', value: currentChar});
+	i++;
+	continue;
+}
+```
+
+示例：解析连续数字
+```javascript
+// 3.2 连续数字解析逻辑
 if (currentChar >= '0' && currentChar <= '9'){
 	const num = text[i];  // 获取当前数字
 	
@@ -53,5 +63,35 @@ if (currentChar >= '0' && currentChar <= '9'){
 	// 3.2.0 保存解析到的数字
 	tokens.push({type: 'Number', value: num});
 	continue; // 解析完数字后，直接进入下一轮循环
+}
+```
+
+示例：解析每个字母
+```javascript
+// 3.3 解析单个字母
+if (currentChar >= 'a' && currentChar <= 'z' || 
+	currentChar >= 'A' && currentChar <= 'Z') {
+    tokens.push({ type: 'Letter', value: currentChar })
+    i++;
+    continue;
+}
+```
+
+示例：解析连续字母
+```javascript
+// 3.3 解析连续字母
+if (currentChar >= 'a' && currentChar <= 'z' || 
+	currentChar >= 'A' && currentChar <= 'Z') {
+    let letter = '';
+
+    while (i < text.length &&
+        ((text[i] >= 'a' && text[i] <= 'z') ||
+        (text[i] >= 'A' && text[i] <= 'Z')
+        )) {
+        letter += text[i];
+        i++;
+    }
+    tokens.push({ type: 'Letter', value: letter })
+    continue;
 }
 ```
