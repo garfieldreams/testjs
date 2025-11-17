@@ -4,6 +4,15 @@ function lexer(str) {
 
     const keywords = new Set(["let", "if", "else"]);
 
+    // 处理符号
+    const operators = [
+        '===', '!==', '**=', '==', '!=', '>=', '<=',
+        '+=', '-=', '*=', '/=', '%=', '&=', '|=', '^=',
+        '++', '--', '**', '+', '-', '*', '/', '%',
+        '&', '|', '^', '~', '=', '!', '>', '<'
+    ];
+    let opMatched = false;
+
 
     /* 主要解析逻辑 
     1. 排除空格
@@ -70,7 +79,7 @@ function lexer(str) {
         特殊多字符：**, **=
         */
 
-        // 4. 处理单字符运算符  +, -, *, /, %, &, |, ^, ~
+        /* // 4. 处理单字符运算符  +, -, *, /, %, &, |, ^, ~
         if (char === '+' || char === '-' || char === '*' || char === '/' ||
             char === '%' || char === '&' || char === '|' || char === '^' ||
             char === '~') {
@@ -175,7 +184,18 @@ function lexer(str) {
                 i++;
             }
             continue;
+        } */
+
+        // 4.0 处理符号
+        for (const op of operators){
+            if(str.startsWith(op, i)){
+                tokens.push({type:'Operator', value: op});
+                i += op.length;
+                opMatched = true;
+                break;
+            }
         }
+        if(opMatched) continue;
 
         // 处理其他字符
         tokens.push({ type: "Unknown", value: char })
