@@ -109,7 +109,7 @@ function lexer(str) {
             continue;
         }
 
-        // 4.3 处理>, >=
+        // 4.3 处理 >, >=
         if (char === '>') {
             if (i + 1 < str.length && str[i + 1] === '=') {
                 tokens.push({ type: 'Operator', value: '>=' });
@@ -121,7 +121,61 @@ function lexer(str) {
             continue;
         }
 
+        // 4.4 处理 <, <=
+        if (char === '<') {
+            if (i + 1 < str.length && str[i + 1] === '=') {
+                tokens.push({ type: 'Operator', value: '<=' });
+                i += 2;
+            } else {
+                tokens.push({ type: 'Operator', value: '<' });
+                i += 1;
+            }
+            continue;
+        }
 
+        // 4.5 处理 +, +=
+        if (char === '+') {
+            if (i + 1 < str.length && str[i + 1] === '=') {
+                tokens.push({ type: 'Operator', value: '+=' });
+                i += 2;
+            } else {
+                tokens.push({ type: 'Operator', value: '+' });
+                i += 1;
+            }
+            continue;
+        }
+
+        // 4.6 处理 -, -=
+        if (char === '-') {
+            if (i + 1 < str.length && str[i + 1] === '=') {
+                tokens.push({ type: 'Operator', value: '-=' });
+                i += 2;
+            } else {
+                tokens.push({ type: 'Operator', value: '-' });
+                i += 1;
+            }
+            continue;
+        }
+
+        // 4.7 处理 *, *=, **, **=
+        if (char === '*') {
+            if (i + 1 < str.length && str[i + 1] === '*') {
+                if (i + 2 < str.length && str[i + 2] === '=') {
+                    tokens.push({ type: 'Operator', value: '**=' });
+                    i += 3;
+                } else {
+                    tokens.push({ type: 'Operator', value: '**' });
+                    i += 2;
+                }
+            } else if (i + 1 < str.length && str[i + 1] === '=') {
+                tokens.push({ type: 'Operator', value: '*=' });
+                i += 2;
+            } else {
+                tokens.push({ type: 'Operator', value: '*' });
+                i++;
+            }
+            continue;
+        }
 
         // 处理其他字符
         tokens.push({ type: "Unknown", value: char })
