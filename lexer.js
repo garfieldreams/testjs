@@ -63,6 +63,23 @@ function lexer(str) {
             continue;
         }
 
+        // 4. 处理 +, -, *, =, ==, ===/
+        if (char === '+' || char === '-' || char === '*' || char === '/') {
+            tokens.push({ type: 'Operator', value: char })
+            i++;
+            continue;
+        } else if (char === '=') {
+            // 4.1 处理 =, ==, === 
+            let operator = '=';
+            while (i + 1 < str.length && str[i + 1] === '=') {
+                operator += '=';
+                i++;
+            }
+            tokens.push({ type: 'Operator', value: operator });
+            i++;
+            continue;
+        }
+
         // 处理其他字符
         tokens.push({ type: "Unknown", value: char })
         i++;
