@@ -63,22 +63,65 @@ function lexer(str) {
             continue;
         }
 
-        // 4. 处理 +, -, *, =, ==, ===/
-        if (char === '+' || char === '-' || char === '*' || char === '/') {
+        /* 
+        单字符运算符：+, -, *, /, %, &, |, ^, ~
+        双字符运算符：==, !=, >=, <=, ++, --, +=, -=, *=, /=, %=
+        三字符运算符：===, !==
+        特殊多字符：**, **=
+        */
+
+        // 4. 处理单字符运算符  +, -, *, /, %, &, |, ^, ~
+        if (char === '+' || char === '-' || char === '*' || char === '/' ||
+            char === '%' || char === '&' || char === '|' || char === '^' ||
+            char === '~') {
             tokens.push({ type: 'Operator', value: char })
             i++;
             continue;
-        } else if (char === '=') {
-            // 4.1 处理 =, ==, === 
-            let operator = '=';
-            while (i + 1 < str.length && str[i + 1] === '=') {
-                operator += '=';
+        }
+
+        // 4.1 处理 =, ==, === , 优先匹配最长的可能token
+        if (char === '=') {
+            if (i + 2 < str.length && str[i + 1] === '=' && str[i + 2] === '=') {
+                tokens.push({ type: 'Operator', value: '===' });
+                i += 3;
+            } else if (i + 1 < str.length && str[i + 1] === '=') {
+                tokens.push({ type: 'Operator', value: '==' });
+                i += 2;
+            } else {
+                tokens.push({ type: 'Operator', value: '=' });
                 i++;
             }
-            tokens.push({ type: 'Operator', value: operator });
-            i++;
             continue;
         }
+
+        // 4.2 处理 !, !=, !==
+        if (char === '!') {
+            if (i + 2 < str.length && str[i + 1] === '=' && str[i + 2] === '=') {
+                tokens.push({ type: 'Operator', value: '!==' });
+                i += 3;
+            } else if (i + 1 < str.length && str[i + 1] === '=') {
+                tokens.push({ type: 'Operator', value: '!=' });
+                i += 2;
+            } else {
+                tokens.push({ type: 'Operator', value: '!' });
+                i++;
+            }
+            continue;
+        }
+
+        // 4.3 处理>, >=
+        if (char === '>') {
+            if (i + 1 < str.length && str[i + 1] === '=') {
+                tokens.push({ type: 'Operator', value: '>=' });
+                i += 2;
+            } else {
+                tokens.push({ type: 'Operator', value: '>' });
+                i += 1;
+            }
+            continue;
+        }
+
+
 
         // 处理其他字符
         tokens.push({ type: "Unknown", value: char })
