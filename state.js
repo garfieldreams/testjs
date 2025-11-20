@@ -33,9 +33,20 @@ function stateMachine(text){
             // 3.0.1 NUMBER 状态处理逻辑
             case states.NUMBER:
                 let numToken = '';
-                while(i < text.length && /\d/.test(text[i])){
-                    numToken += text[i];
-                    i++;
+                let hasDot = false;  // 判断小数点
+
+                while(i < text.length){
+                    if(/\d/.test(text[i])){
+                        numToken += text[i];
+                        i++;
+                    } else if (text[i] === '.' && !hasDot){
+                        // 允许一个小数点
+                        numToken += text[i];
+                        hasDot = true;
+                        i++;
+                    } else { // 遇到非数字或第二个小数点，结束
+                        break;
+                    }
                 }
                 tokens.push({type: 'NUMBER', value: numToken});
                 currentState = states.START;
@@ -56,5 +67,5 @@ function stateMachine(text){
     return tokens;
 }
 
-console.log(stateMachine('123abc456ui')); // 输出 ['123', '456']
+console.log(stateMachine('123abc456ui3.145')); // 输出 ['123', '456']
 console.log(stateMachine('')); // 输入为空，START直接终止，输出 []
