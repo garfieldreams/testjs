@@ -1,60 +1,60 @@
-const STATES = {
-    INIT: 'INIT',
-    IN_STRING: 'IN_STRING',
-    IN_ESCAPE: 'IN_ESCAPE',
-    DONE: 'DONE'
-};
+function stateMachine(text){
+    // 1. 定义所有可能的状态
+    const states = {
+        START: 'START',
+        NUMBER: 'NUMBER',
+        WORD: 'WORD'
+    };
 
-function parseString(input) {
-    let state = STATES.INIT;
-    let result = '';
-    let quoteType = null;
+    // %% 空值处理：前置检验
+    if (!text || typeof text !== 'string') return [];
 
-    for (const char of input) {
-        // 如果循环完成，则提前退出
-        if(state === STATES.DONE){
-            break;
-        }
+    // 2. 初始化状态机的核心变量
+    let i = 0;                          // 指针位置
+    let currentState = states.START;    // 当前状态
+    let tokens = [];                    // 结果收集
 
-        switch (state) {
-            case STATES.INIT:
-                // 初试状态：遇到引号则进入字符串状态
-                if (char === "'" || char === '"') {
-                    quoteType = char;
-                    state = STATES.IN_STRING;
+    // 3. 状态机主循环
+    while(i < text.length){
+    
+        // 3.0 核心处理逻辑
+        switch(currentState){
+            // 3.0.0 START 状态：处理类型分流和中转
+            case states.START:
+                if(/\d/.test(text[i])){
+                    currentState = states.NUMBER;
+                } else if (/[a-zA-Z]/.test(text[i])){
+                    currentState = states.WORD;
                 } else {
-                    throw new Error('字符串必须以单引号或者双引号开头')
+                    i++;
                 }
                 break;
 
-            case STATES.IN_STRING:
-                // 遇到转义符，进入转义状态
-                if (char === '\\') {
-                    state = STATES.IN_ESCAPE;
-                } else if (char === quoteType) {
-                    // 标记为完成状态
-                    state = STATES.DONE;
-                } else {
-                    // 普通字符，直接加入结果
-                    result += char;
+            // 3.0.1 NUMBER 状态处理逻辑
+            case states.NUMBER:
+                let numToken = '';
+                while(i < text.length && /\d/.test(text[i])){
+                    numToken += text[i];
+                    i++;
                 }
+                tokens.push({type: 'NUMBER', value: numToken});
+                currentState = states.START;
                 break;
 
-            case STATES.IN_ESCAPE:
-                // 转义状态： 直接加入结果，然后回到字符串状态
-                result += char;
-                state = STATES.IN_STRING;
-                break;
+            // 3.0.2 WORD 状态处理逻辑    
+            case states.WORD:
+                let wordToken = '';
+                while(i < text.length && /[a-zA-Z]/.test(text[i])){
+                    wordToken += text[i];
+                    i++;
+                }    
+                tokens.push({type: 'WORD', value: wordToken});
+                currentState = states.START;
+                break;  
         }
     }
-
-    // 统一的状态检查
-    if (state === STATES.INIT) {
-        throw new Error('字符串必须以单引号或者双引号开头');
-    } else if (state !== STATES.DONE){
-        throw new Error('字符串缺少闭合引号')
-    }
-    return result;
+    return tokens;
 }
 
-console.log(parseString("'a\\b'"));
+console.log(stateMachine('123abc456ui')); // 输出 ['123', '456']
+console.log(stateMachine('')); // 输入为空，START直接终止，输出 []
