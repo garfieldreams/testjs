@@ -24,7 +24,7 @@ function stateMachine(text){
             case states.START:
                 if(/\d/.test(text[i])){
                     currentState = states.NUMBER;
-                } else if (/[a-zA-Z]/.test(text[i])){
+                } else if (/^[a-zA-Z_$]$/.test(text[i])){
                     currentState = states.IDENTIFIER;
                 } else {
                     i++;
@@ -56,7 +56,7 @@ function stateMachine(text){
             // 3.0.2 IDENTIFIER 状态处理逻辑    
             case states.IDENTIFIER:
                 let idToken = '';
-                while(i < text.length && /[a-zA-Z]/.test(text[i])){
+                while(i < text.length && /^[a-zA-Z_$]$/.test(text[i])){
                     idToken += text[i];
                     i++;
                 }
