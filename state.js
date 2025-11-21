@@ -56,7 +56,7 @@ function stateMachine(text){
             // 3.0.2 IDENTIFIER 状态处理逻辑    
             case states.IDENTIFIER:
                 let idToken = '';
-                while(i < text.length && /^[a-zA-Z_$]$/.test(text[i])){
+                while(i < text.length && /^[a-zA-Z0-9_$]$/.test(text[i])){
                     idToken += text[i];
                     i++;
                 }
