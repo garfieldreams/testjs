@@ -5,6 +5,7 @@ function stateMachine(text){
         NUMBER: 'NUMBER',
         IDENTIFIER: 'IDENTIFIER'
     };
+    const keywords = new Set(['let', 'if', 'else', 'function', 'return']);  // 关键字集合
 
     // %% 空值处理：前置检验
     if (!text || typeof text !== 'string') return [];
@@ -52,14 +53,16 @@ function stateMachine(text){
                 currentState = states.START;
                 break;
 
-            // 3.0.2 WORD 状态处理逻辑    
+            // 3.0.2 IDENTIFIER 状态处理逻辑    
             case states.IDENTIFIER:
-                let identifierToken = '';
+                let idToken = '';
                 while(i < text.length && /[a-zA-Z]/.test(text[i])){
-                    identifierToken += text[i];
+                    idToken += text[i];
                     i++;
-                }    
-                tokens.push({type: 'IDENTIFIER', value: identifierToken});
+                }
+                // 判断是否为关键字
+                const idType = keywords.has(idToken) ? 'KEYWORD' : 'IDENTIFIER';    
+                tokens.push({type: idType, value: idToken});
                 currentState = states.START;
                 break;  
         }
@@ -69,3 +72,4 @@ function stateMachine(text){
 
 console.log(stateMachine('123abc456ui3.145')); // 输出 ['123', 'abc', '456', 'ui', '3.145']
 console.log(stateMachine('')); // 输入为空，START直接终止，输出 []
+console.log(stateMachine('let age = 18; if (age > 0) { return age; }'));
