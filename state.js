@@ -3,7 +3,7 @@ function stateMachine(text){
     const states = {
         START: 'START',
         NUMBER: 'NUMBER',
-        WORD: 'WORD'
+        IDENTIFIER: 'IDENTIFIER'
     };
 
     // %% 空值处理：前置检验
@@ -24,7 +24,7 @@ function stateMachine(text){
                 if(/\d/.test(text[i])){
                     currentState = states.NUMBER;
                 } else if (/[a-zA-Z]/.test(text[i])){
-                    currentState = states.WORD;
+                    currentState = states.IDENTIFIER;
                 } else {
                     i++;
                 }
@@ -53,13 +53,13 @@ function stateMachine(text){
                 break;
 
             // 3.0.2 WORD 状态处理逻辑    
-            case states.WORD:
-                let wordToken = '';
+            case states.IDENTIFIER:
+                let identifierToken = '';
                 while(i < text.length && /[a-zA-Z]/.test(text[i])){
-                    wordToken += text[i];
+                    identifierToken += text[i];
                     i++;
                 }    
-                tokens.push({type: 'WORD', value: wordToken});
+                tokens.push({type: 'IDENTIFIER', value: identifierToken});
                 currentState = states.START;
                 break;  
         }
@@ -67,5 +67,5 @@ function stateMachine(text){
     return tokens;
 }
 
-console.log(stateMachine('123abc456ui3.145')); // 输出 ['123', '456']
+console.log(stateMachine('123abc456ui3.145')); // 输出 ['123', 'abc', '456', 'ui', '3.145']
 console.log(stateMachine('')); // 输入为空，START直接终止，输出 []
