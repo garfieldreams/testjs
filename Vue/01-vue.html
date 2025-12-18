@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <h1>{{ message }}</h1>
+        <p>我的名字是：{{ name }}</p>
+        <p>我的年龄是：{{ age }}</p>
+        <p>计算后的年龄（明年）：{{ age + 1 }}</p>
+    </div>
+
+    <script>
+        // 从Vue全局对象中取出 createApp方法
+        const { createApp } = Vue;
+
+        // 创建vue应用实例
+        createApp({
+            // data选项：返回一个对象，里面的所有属性都是响应式数据
+            data() {
+                return {
+                    message: 'Hello Vue! 这是我的第一个响应式数据',
+                    name: '小明',
+                    age: 18
+                };
+            }
+            // 把Vue应用挂载到id为app的div上
+        }).mount('#app');
+    </script>
+</body>
+
+</html>
