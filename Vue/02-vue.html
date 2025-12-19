@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="app">
+        <h3>待办清单 v-for渲染:</h3>
+        <ul>
+            <li v-for="(todo, index) in todos" :key="todo.id">{{ todo.text }}</li>
+        </ul>
+
+        <button @click="addTodo">添加待办事项</button>
+    </div>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script>
+        const { createApp } = Vue;
+        const app = createApp({
+            data() {
+                return {
+                    todos: [
+                        {
+                            id: 1,
+                            text: '学习Vue',
+                            completed: false
+                        },
+                        {
+                            id: 2,
+                            text: '完成项目',
+                            completed: true
+                        }
+                    ],
+                    nextId:3
+                };
+            },
+            methods: {
+                addTodo() {
+                    this.todos.push({
+                        id: this.nextId++,
+                        text: '新的待办事项',
+                        completed: false
+                    });
+                }
+            }
+        });
+        app.mount('#app');
+    </script>
+</body>
+</html>
