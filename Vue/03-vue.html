@@ -17,10 +17,9 @@
         </div>
         <div>
             <label>性别：</label>
-            <select v-model="gender">
-                <option value="male">男</option>
-                <option value="female">女</option>
-            </select>
+            <input type="radio" v-model="gender" value="male">男
+            <input type="radio" v-model="gender" value="female">女
+            <p>当前性别：{{ gender === 'male' ? '男' : '女' }}</p>
         </div>
     </div>
 
