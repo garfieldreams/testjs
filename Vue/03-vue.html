@@ -21,6 +21,11 @@
             <input type="radio" v-model="gender" value="female">女
             <p>当前性别：{{ gender === 'male' ? '男' : '女' }}</p>
         </div>
+        <div>
+            <label>邮箱：</label>
+            <input type="email" v-model="email" placeholder="请输入邮箱">
+            <p>当前邮箱：{{ email }}</p>
+        </div>
     </div>
 
     <button @click="resetForm">重置按钮</button>
@@ -33,7 +38,8 @@
                 return {
                     username: '',
                     password: '',
-                    gender: 'male'
+                    gender: 'male',
+                    email: ''
                 }
             },
             methods: {
@@ -41,6 +47,7 @@
                     this.username = '';
                     this.password = '';
                     this.gender = 'male';
+                    this.email = '';
                 }
             }
         })
