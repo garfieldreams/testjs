@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form</title>
+</head>
+<body>
+    <div id="app">
+        <div>
+            <label>用户名：</label>
+            <input type="text" v-model="username">
+        </div>
+        <div>
+            <label>密码：</label>
+            <input type="password" v-model="password">
+        </div>
+        <div>
+            <label>性别：</label>
+            <select v-model="gender">
+                <option value="male">男</option>
+                <option value="female">女</option>
+            </select>
+        </div>
+    </div>
+
+    <button @click="resetForm">重置按钮</button>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script>
+        const { createApp } = Vue;
+        const app = createApp({
+            data() {
+                return {
+                    username: '',
+                    password: '',
+                    gender: 'male'
+                }
+            },
+            methods: {
+                resetForm() {
+                    this.username = '';
+                    this.password = '';
+                    this.gender = 'male';
+                }
+            }
+        })
+        app.mount('#app');
+    </script>
+</body>
+</html>
