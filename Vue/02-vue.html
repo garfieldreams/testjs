@@ -9,6 +9,7 @@
 
 <body>
     <div id="app">
+        <h2>姓名：{{ fullName }}</h2>
         <h3>待办清单 v-for渲染:</h3>
         <button @click="addTodo">添加待办事项</button>
         <button @click="deleteTodo">删除待办事项</button>
@@ -24,6 +25,8 @@
         const app = createApp({
             data() {
                 return {
+                    firstName: '张',
+                    lastName: '三',
                     todos: [
                         {
                             id: 1,
@@ -49,6 +52,11 @@
                 },
                 deleteTodo() {
                     this.todos.pop();
+                }
+            },
+            computed: {
+                fullName() {
+                    return this.firstName + this.lastName;
                 }
             }
         });
