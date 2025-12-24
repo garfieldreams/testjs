@@ -9,13 +9,23 @@
 
 <body>
     <div id="app">
+        <label>
+            姓名：
+            <input type="text" v-model="firstName" placeholder="请输入 firstName">
+            <input type="text" v-model="lastName" placeholder="请输入 lastName">
+        </label>
         <h2>姓名：{{ fullName }}</h2>
         <h3>待办清单 v-for渲染:</h3>
-        <button @click="addTodo">添加待办事项</button>
-        <button @click="deleteTodo">删除待办事项</button>
+        <p>已完成待办事项数量：{{ doneTodosCount }}</p>
+        <p>待办事项状态：{{ todoStatus }}</p>
+        <button @click="addTodo" style="margin-bottom: 10px; margin-right: 10px;">添加待办事项</button>
+        <button @click="deleteTodo" style="margin-bottom: 10px;">删除待办事项</button>
 
         <ul>
-            <li v-for="(todo, index) in todos" :key="todo.id">{{ todo.text }}</li>
+            <li v-for="(todo, index) in todos" :key="todo.id">
+                索引：{{ index }} -> 待办事项：{{ todo.text }} -> 状态：{{ todo.completed ? '已完成' : '未完成' }}
+                <button @click="toggleTodo(todo.id)">切换状态</button>
+            </li>
         </ul>
     </div>
 
@@ -39,24 +49,41 @@
                             completed: true
                         }
                     ],
-                    nextId: 3
+                    nextId: 2
                 };
             },
             methods: {
                 addTodo() {
                     this.todos.push({
                         id: this.nextId++,
-                        text: '新的待办事项',
+                        text: '新的待办事项' + this.nextId,
                         completed: false
                     });
                 },
                 deleteTodo() {
                     this.todos.pop();
+                },
+                toggleTodo(todoId) {
+                    const todo = this.todos.find(todo => todo.id === todoId);
+                    if (todo) {
+                        todo.completed = !todo.completed;
+                    }
                 }
             },
             computed: {
                 fullName() {
                     return this.firstName + this.lastName;
+                },
+                doneTodosCount() {
+                    return this.todos.filter(todo => todo.completed).length;
+                },
+                doneTodos() {
+                    return this.todos.filter(todo => todo.completed);
+                },
+                todoStatus() {
+                    const totalTodos = this.todos.length;
+                    const doneCount = this.doneTodosCount;
+                    return doneCount === totalTodos ? '所有待办事项已完成' : '有待办事项未完成';
                 }
             }
         });
